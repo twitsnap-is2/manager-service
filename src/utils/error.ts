@@ -1,8 +1,9 @@
 import { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { BlankEnv } from "hono/types";
+import { BlankEnv, HTTPResponseError } from "hono/types";
 import { StatusCode } from "hono/utils/http-status";
 import { logger } from "./logger.js";
+import { env } from "../env.js";
 
 export type CustomErrorProps = {
   type?: string;
@@ -47,4 +48,24 @@ export class CustomError extends HTTPException {
   log() {
     logger.error(`${this.status} - ${this.title}: ${this.detail}`);
   }
+}
+
+// The errorHandler function is middleware that handles errors in the application.
+// It returns a JSON response with the error as a JSON object as specified at RFC 7807.
+// If the error is an instance of SnapError, it returns the error as is.
+// If not, it returns a generic internal error.
+export function errorHandler(error: Error | HTTPResponseError, c: Context<BlankEnv, any, {}>) {
+  let customError: CustomError;
+  if (error instanceof CustomError) {
+    customError = error;
+  } else {
+    customError = new CustomError({
+      title: "Unexpected Internal Error",
+      status: 500,
+      detail: "Generic internal error ocurred.",
+    });
+  }
+
+  if (env.ENV !== "test") customError.log();
+  return c.json(customError.toJSON(c), customError.status);
 }
