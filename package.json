@@ -8,6 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "test": "vitest",
     "build": "tsc -p .",
+    "prod:build": "tsc -p .",
     "external:gen": "npx openapi-typescript http://localhost:3000/openapi.json -o ./src/external/defs/echo.d.ts",
     "test:ui": "vitest --ui --coverage",
     "test:ci": "vitest run --coverage"
