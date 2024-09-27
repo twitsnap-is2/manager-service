@@ -6,7 +6,7 @@ import { trimTrailingSlash } from "hono/trailing-slash";
 import { echoRouter } from "./resources/echo/echo.router.js";
 import { swaggerUI } from "@hono/swagger-ui";
 import { openAPI } from "./utils/open-api.js";
-import { errorHandler } from "./utils/error.js";
+import { errorHandler, handleCustomErrorJSON } from "./utils/error.js";
 
 export const app = openAPI.router();
 
@@ -17,6 +17,7 @@ app.use(
 );
 
 app.onError(errorHandler);
+app.use(handleCustomErrorJSON);
 
 app.use(trimTrailingSlash());
 

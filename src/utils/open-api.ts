@@ -1,14 +1,21 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { CustomError } from "./error.js";
+import { CustomError, errorSchema } from "./error.js";
 
 function router() {
   return new OpenAPIHono({
     defaultHook: (result, c) => {
       if (!result.success) {
+        const errors = {} as Record<string, string>;
+        result.error.errors.forEach((e) => {
+          if (errors[e.path.join(".")]) return;
+          errors[e.path.join(".")] = e.message;
+        });
+
         const error = new CustomError({
           title: "Invalid request " + c.req.method + " " + c.req.path,
           status: 400,
           detail: result.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(",\n"),
+          errors,
         });
 
         return c.json(error.toJSON(c), 400);
@@ -106,13 +113,7 @@ function route<
         required: true,
         content: {
           "application/json": {
-            schema: z.object({
-              type: z.string().openapi({ description: "Error type", example: "about:blank" }),
-              title: z.string().openapi({ description: "Error title", example: "Unexpected Internal Error" }),
-              status: z.number().openapi({ description: "HTTP status code", example: 500 }),
-              detail: z.string().openapi({ description: "Error detail", example: "Generic internal error ocurred." }),
-              instance: z.string().openapi({ description: "Request path", example: "/echo" }),
-            }),
+            schema: errorSchema,
           },
         },
       },
