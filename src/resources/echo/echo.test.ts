@@ -33,6 +33,9 @@ describe("POST /echo", () => {
       detail: "message: Required",
       instance: "/echo",
       status: 400,
+      errors: {
+        message: "Required",
+      },
     });
   });
 });
