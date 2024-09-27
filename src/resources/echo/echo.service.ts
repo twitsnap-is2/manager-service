@@ -4,7 +4,6 @@ export class EchoService {
   }
 
   async echo(body: string) {
-    throw new Error("Not implemented");
     return body;
   }
 }

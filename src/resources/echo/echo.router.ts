@@ -1,7 +1,6 @@
 import { EchoService } from "./echo.service.js";
 import { z } from "@hono/zod-openapi";
 import { openAPI } from "../../utils/open-api.js";
-import { echo } from "../../external/auth.external.js";
 
 export const echoRouter = openAPI.router();
 
