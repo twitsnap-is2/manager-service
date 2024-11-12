@@ -3,7 +3,7 @@ import { logger as honoLogger } from "hono/logger";
 import { logger } from "./utils/logger.js";
 import { env } from "./env.js";
 import { trimTrailingSlash } from "hono/trailing-slash";
-import { echoRouter } from "./resources/echo/echo.router.js";
+import { notificationsRouter } from "./resources/notifications/notifications.router.js";
 import { swaggerUI } from "@hono/swagger-ui";
 import { openAPI } from "./utils/open-api.js";
 import { errorHandler, handleCustomErrorJSON } from "./utils/error.js";
@@ -35,7 +35,7 @@ app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
 
 app.get("/swagger", swaggerUI({ url: "/openapi.json" }));
 
-app.route("/echo", echoRouter);
+app.route("/echo", notificationsRouter);
 
 serve({ fetch: app.fetch, port: env.PORT, hostname: env.HOSTNAME }, () => {
   console.log(`Running at: http://${env.HOSTNAME}:${env.PORT}`);

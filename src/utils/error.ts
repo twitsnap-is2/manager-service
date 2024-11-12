@@ -50,7 +50,7 @@ export class CustomError extends HTTPException {
   }
 
   // The toJSON method returns the error as a JSON object as specified at RFC 7807.
-  toJSON(c: Context<BlankEnv, any, {}>) {
+  toJSON(c: Context<any, any, any>) {
     return {
       type: this.type,
       title: this.title,
@@ -71,7 +71,7 @@ export class CustomError extends HTTPException {
 // It returns a JSON response with the error as a JSON object as specified at RFC 7807.
 // If the error is an instance of SnapError, it returns the error as is.
 // If not, it returns a generic internal error.
-export function errorHandler(error: Error | HTTPResponseError, c: Context<BlankEnv, any, {}>) {
+export function errorHandler(error: Error | HTTPResponseError, c: Context<any, any, {}>) {
   let customError: CustomError;
   if (error instanceof CustomError) {
     customError = error;

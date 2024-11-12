@@ -10,6 +10,8 @@ export const env = createEnv({
     ENV: z.enum(["development", "production", "test"]),
     HOSTNAME: z.coerce.string().default("localhost"),
     PORT: z.coerce.number().default(3000),
+    SUPABASE_URL: z.string(),
+    SUPABASE_SERVICE_ROLE: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

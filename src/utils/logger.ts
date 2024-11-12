@@ -6,6 +6,7 @@ export function info(msg: any, ...rest: any[]) {
 }
 
 export function error(msg: any, ...rest: any[]) {
+  if (env.ENV === "test") return;
   console.error(`\x1b[34m[${new Date().toISOString().split(".")[0]}] \x1b[31mERROR\x1b[0m`, msg, ...rest);
 }
 
