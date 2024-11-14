@@ -49,6 +49,7 @@ export type Database = {
           id: number
           link: string | null
           title: string
+          type: string
           user_id: string
         }
         Insert: {
@@ -57,6 +58,7 @@ export type Database = {
           id?: number
           link?: string | null
           title: string
+          type: string
           user_id?: string
         }
         Update: {
@@ -65,6 +67,28 @@ export type Database = {
           id?: number
           link?: string | null
           title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      users_notification_devices: {
+        Row: {
+          created_at: string
+          id: number
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          token?: string
           user_id?: string
         }
         Relationships: []

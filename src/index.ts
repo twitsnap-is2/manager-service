@@ -35,7 +35,7 @@ app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
 
 app.get("/swagger", swaggerUI({ url: "/openapi.json" }));
 
-app.route("/echo", notificationsRouter);
+app.route("/notifications", notificationsRouter);
 
 serve({ fetch: app.fetch, port: env.PORT, hostname: env.HOSTNAME }, () => {
   console.log(`Running at: http://${env.HOSTNAME}:${env.PORT}`);
