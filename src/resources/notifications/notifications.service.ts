@@ -5,7 +5,11 @@ import { logger } from "../../utils/logger.js";
 
 export class NotificationsService {
   async getByUserId(userId: string) {
-    const { data, error } = await supabase.from("notifications").select("*").eq("user_id", userId);
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
     if (error) {
       throw new CustomError({
         title: "Error fetching notifications",
