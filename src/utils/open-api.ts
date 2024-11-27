@@ -14,7 +14,9 @@ function router() {
         const error = new CustomError({
           title: "Invalid request " + c.req.method + " " + c.req.path,
           status: 400,
-          detail: result.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(",\n"),
+          detail: result.error.errors
+            .map((e) => `${e.path.join(".")}: ${e.message}`)
+            .join(",\n"),
           errors,
         });
 
@@ -55,7 +57,10 @@ function route<
   TParams extends z.AnyZodObject | undefined,
   TQuery extends z.AnyZodObject | undefined,
   TBody extends z.ZodTypeAny | undefined,
-  TResponses extends Record<number, { description: string; schema: z.ZodTypeAny }>
+  TResponses extends Record<
+    number,
+    { description: string; schema: z.ZodTypeAny }
+  >
 >(
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
   path: string,
@@ -72,7 +77,9 @@ function route<
       description: string;
       content: {
         "application/json": {
-          schema: TResponses[K] extends { schema: z.ZodTypeAny } ? TResponses[K]["schema"] : never;
+          schema: TResponses[K] extends { schema: z.ZodTypeAny }
+            ? TResponses[K]["schema"]
+            : never;
         };
       };
     };
@@ -92,7 +99,9 @@ function route<
     method: method.toLowerCase() as never,
     security: [{ Bearer: [] }],
     request: {
-      params: props?.params as TParams extends z.AnyZodObject ? TParams : undefined,
+      params: props?.params as TParams extends z.AnyZodObject
+        ? TParams
+        : undefined,
       query: props.query as TQuery extends z.AnyZodObject ? TQuery : undefined,
       body: (props.body
         ? {
@@ -103,7 +112,11 @@ function route<
             },
           }
         : undefined) as TBody extends z.ZodTypeAny
-        ? { description: string; required: true; content: { "application/json": { schema: TBody } } }
+        ? {
+            description: string;
+            required: true;
+            content: { "application/json": { schema: TBody } };
+          }
         : undefined,
     },
     responses: {
