@@ -1,7 +1,7 @@
 import { ManagerService } from "./manager.service.js";
 import { z } from "@hono/zod-openapi";
 import { openAPI } from "../../utils/open-api.js";
-import { errorSchema } from "../../utils/error.js";
+import { CustomError, errorSchema } from "../../utils/error.js";
 
 export const managerRouter = openAPI.router();
 
@@ -145,6 +145,17 @@ const validateAPIKeyOpenAPI = openAPI.route("POST", "/validate", {
 
 managerRouter.openapi(validateAPIKeyOpenAPI, async (c) => {
   const { APIKey } = c.req.valid("json");
+  const bearer = c.req.header("Authorization");
+  const requestingAPIKey = bearer?.split(" ").pop();
+  if (!requestingAPIKey) {
+    throw new CustomError({
+      title: "Service Unavailable",
+      detail: "API key is required",
+      status: 503,
+    });
+  }
+
+  await managerService.validateAPIKey(requestingAPIKey);
   const service = await managerService.validateAPIKey(APIKey);
 
   return c.json(service, 200);
