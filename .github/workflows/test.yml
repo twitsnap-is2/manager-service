@@ -33,6 +33,13 @@ jobs:
           node-version: "20.x"
       - name: "Install Deps"
         run: npm install
+      - name: Wait for Postgres
+        run: |
+          echo "Waiting for Postgres to be ready..."
+          until nc -z localhost 5432; do
+            echo "Waiting for Postgres to start..."
+            sleep 5
+          done
       - name: "Generate prisma"
         run: npx prisma migrate reset --force
       - name: "Test"
