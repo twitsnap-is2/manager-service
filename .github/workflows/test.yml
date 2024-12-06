@@ -18,13 +18,13 @@ jobs:
       postgres:
         image: postgres:13
         ports:
-          - 5633:5432
+          - 5433:5432
         env:
           POSTGRES_NAME: manager_db_test
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
     env:
-      DATABASE_URL: postgresql://user:password@localhost:5633/manager_db_test?schema=public
+      DATABASE_URL: postgresql://user:password@localhost:5433/manager_db_test?schema=public
     steps:
       - uses: actions/checkout@v4
       - name: "Install Node"
