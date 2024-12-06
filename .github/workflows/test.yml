@@ -14,7 +14,17 @@ jobs:
       contents: read
       # Required to put a comment into the pull-request
       pull-requests: write
-
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5633:5432
+        env:
+          POSTGRES_NAME: manager_db_test
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+    env:
+      DATABASE_URL: postgresql://user:password@localhost:5633/manager_db_test?schema=public
     steps:
       - uses: actions/checkout@v4
       - name: "Install Node"
@@ -23,6 +33,8 @@ jobs:
           node-version: "20.x"
       - name: "Install Deps"
         run: npm install
+      - name: "Generate prisma"
+        run: npx prisma migrate reset --force
       - name: "Test"
         run: npm run test:ci
       - name: "Report Coverage"
