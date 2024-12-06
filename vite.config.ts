@@ -10,8 +10,8 @@ export default defineConfig(({ mode }) => {
         reporter: ["text", "html", "json-summary", "json"],
         reportOnFailure: true,
       },
-      // fileParallelism: false,
-      // setupFiles: ["./src/tests/setup.ts"],
+      fileParallelism: false,
+      setupFiles: ["./src/tests/setup.ts"],
     },
   };
 });
